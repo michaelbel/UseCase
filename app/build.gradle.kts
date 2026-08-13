@@ -5,6 +5,12 @@ plugins {
     alias(libs.plugins.google.ksp)
 }
 
+private val gitCommitsCount: Int by lazy {
+    ProcessBuilder("git", "rev-list", "--count", "HEAD")
+        .redirectErrorStream(true)
+        .start().inputStream.bufferedReader().readLine().trim().toInt()
+}
+
 kotlin {
     jvmToolchain(libs.versions.jdk.get().toInt())
 }
@@ -17,8 +23,23 @@ android {
         applicationId = "org.michaelbel.usecase"
         minSdk = libs.versions.min.sdk.get().toInt()
         targetSdk = libs.versions.target.sdk.get().toInt()
-        versionCode = 1
+        versionCode = gitCommitsCount
         versionName = "1.0.0"
+    }
+
+    signingConfigs {
+        getByName("debug") {
+            keyAlias = "usecase"
+            keyPassword = "password"
+            storeFile = rootProject.file(".github/debug-key.jks")
+            storePassword = "password"
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
+        }
     }
 
     buildFeatures {
@@ -27,7 +48,7 @@ android {
 }
 
 base {
-    archivesName.set("UseCase-v${android.defaultConfig.versionName}")
+    archivesName.set("UseCase-v${android.defaultConfig.versionName}(${android.defaultConfig.versionCode})")
 }
 
 dependencies {
@@ -43,5 +64,13 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.splashscreen)
     debugImplementation(libs.androidx.compose.ui.tooling)
+}
+
+tasks.register("printVersion") {
+    description = "Prints the current versionName and versionCode to stdout."
+    doLast {
+        println("VERSION_NAME=${android.defaultConfig.versionName}")
+        println("VERSION_CODE=${android.defaultConfig.versionCode}")
+    }
 }
 

@@ -1,8 +1,10 @@
-# UseCase
+UseCase
+=
 
-Практическое MVI-демо использования `UseCase` и `FlowUseCase`.
+[![workflow-status](https://img.shields.io/github/actions/workflow/status/michaelbel/usecase/ci.yml?style=for-the-badge&logo=github&labelColor=3F464F)](https://github.com/michaelbel/usecase/actions)
+[![last-commit](https://img.shields.io/github/last-commit/michaelbel/usecase?style=for-the-badge&logo=github&labelColor=3F464F)](https://github.com/michaelbel/usecase/commits)
 
-Базовые классы перенесены из `vpdelivery-android/shared/domain` без изменения поведения:
+Практическое MVI-демо использования `UseCase` и `FlowUseCase`: базовые классы перенесены из `vpdelivery-android/shared/domain` без изменения поведения.
 
 - `UseCase` переключает dispatcher, выполняет suspend-операцию и возвращает `Result<R>`;
 - `FlowUseCase` применяет dispatcher к потоку через `flowOn`.
