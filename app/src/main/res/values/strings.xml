@@ -1,18 +1,3 @@
 <resources>
-    <string name="app_name">UseCase demo</string>
-    <string name="use_case_title">UseCase&lt;Unit, DemoTask&gt;</string>
-    <string name="use_case_description">Одноразовая suspend-операция. Кнопка запускает invoke(Unit), результат извлекается через getOrThrow().</string>
-    <string name="flow_use_case_title">FlowUseCase&lt;Unit, List&lt;DemoTask&gt;&gt;</string>
-    <string name="flow_use_case_description">Поток собирается через collectLatest и автоматически обновляет MVI-модель.</string>
-    <string name="ready">ГОТОВ</string>
-    <string name="observing">FLOW</string>
-    <string name="run_use_case">Выполнить UseCase</string>
-    <string name="initial_loading">Подключаем FlowUseCase…</string>
-    <string name="summary">Задачи: %1$d · выполнено: %2$d</string>
-    <string name="task_title">Демо-задача #%1$d</string>
-    <string name="task_subtitle">Поколение %1$d · %2$s</string>
-    <string name="task_status_completed">выполнена</string>
-    <string name="task_status_pending">ожидает выполнения</string>
-    <string name="task_added">UseCase добавил задачу #%1$d</string>
-    <string name="use_case_failed">UseCase завершился с ошибкой</string>
+    <string name="app_name">UseCase</string>
 </resources>

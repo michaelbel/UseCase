@@ -59,7 +59,6 @@ fun UseCasesScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    val strings = rememberAppStrings()
 
     ObserveAsEvents(
         flow = viewModel.eventFlow
@@ -68,8 +67,8 @@ fun UseCasesScreen(
         scope.launch {
             snackbarHostState.showSnackbar(
                 message = when (event) {
-                    is UseCasesEvent.UseCaseFailed -> strings.useCaseFailed
-                    is UseCasesEvent.TaskAdded -> strings.taskAdded(event.taskId)
+                    is UseCasesEvent.UseCaseFailed -> "UseCase завершился с ошибкой"
+                    is UseCasesEvent.TaskAdded -> "UseCase добавил задачу #${event.taskId}"
                 }
             )
         }
@@ -115,7 +114,7 @@ private fun UseCasesScreenContent(
             ExtendedFloatingActionButton(
                 text = {
                     Text(
-                        text = strings.runUseCase
+                        text = "Выполнить UseCase"
                     )
                 },
                 icon = {
@@ -149,7 +148,7 @@ private fun UseCasesScreenContent(
                         CircularProgressIndicator()
 
                         Text(
-                            text = strings.initialLoading,
+                            text = "Подключаем FlowUseCase…",
                             style = MaterialTheme.typography.bodyLarge
                         )
                     }
@@ -170,20 +169,20 @@ private fun UseCasesScreenContent(
                         ListItem(
                             headlineContent = {
                                 Text(
-                                    text = strings.useCaseTitle,
+                                    text = "UseCase<Unit, DemoTask>",
                                     fontFamily = FontFamily.Monospace,
                                     fontWeight = FontWeight.Bold
                                 )
                             },
                             supportingContent = {
                                 Text(
-                                    text = strings.useCaseDescription
+                                    text = "Одноразовая suspend-операция. Кнопка запускает invoke(Unit), результат извлекается через getOrThrow()."
                                 )
                             },
                             trailingContent = {
                                 when {
                                     state.isAdding -> CircularProgressIndicator()
-                                    else -> Text(text = strings.ready)
+                                    else -> Text(text = "ГОТОВ")
                                 }
                             },
                             colors = ListItemDefaults.colors(
@@ -198,19 +197,19 @@ private fun UseCasesScreenContent(
                         ListItem(
                             headlineContent = {
                                 Text(
-                                    text = strings.flowUseCaseTitle,
+                                    text = "FlowUseCase<Unit, List<DemoTask>>",
                                     fontFamily = FontFamily.Monospace,
                                     fontWeight = FontWeight.Bold
                                 )
                             },
                             supportingContent = {
                                 Text(
-                                    text = strings.flowUseCaseDescription
+                                    text = "Поток собирается через collectLatest и автоматически обновляет MVI-модель."
                                 )
                             },
                             trailingContent = {
                                 Text(
-                                    text = strings.observing
+                                    text = "FLOW"
                                 )
                             },
                             colors = ListItemDefaults.colors(
@@ -227,16 +226,13 @@ private fun UseCasesScreenContent(
                         ListItem(
                             headlineContent = {
                                 Text(
-                                    text = strings.summary(
-                                        total = state.tasks.size,
-                                        completed = state.completedCount
-                                    ),
+                                    text = "Задачи: ${state.tasks.size} · выполнено: ${state.completedCount}",
                                     fontWeight = FontWeight.Bold
                                 )
                             },
                             supportingContent = {
                                 Text(
-                                    text = strings.flowUseCaseDescription
+                                    text = "Поток собирается через collectLatest и автоматически обновляет MVI-модель."
                                 )
                             }
                         )
@@ -248,7 +244,7 @@ private fun UseCasesScreenContent(
                         ListItem(
                             headlineContent = {
                                 Text(
-                                    text = strings.taskTitle(task.id),
+                                    text = "Демо-задача #${task.id}",
                                     fontWeight = FontWeight.SemiBold
                                 )
                             },
@@ -256,11 +252,12 @@ private fun UseCasesScreenContent(
                                 dispatch(UseCasesIntent.ToggleTask(task.id))
                             },
                             supportingContent = {
+                                val status = when (task.completed) {
+                                    true -> "выполнена"
+                                    false -> "ожидает выполнения"
+                                }
                                 Text(
-                                    text = strings.taskSubtitle(
-                                        generation = task.generation,
-                                        completed = task.completed
-                                    )
+                                    text = "Поколение ${task.generation} · $status"
                                 )
                             },
                             trailingContent = {
