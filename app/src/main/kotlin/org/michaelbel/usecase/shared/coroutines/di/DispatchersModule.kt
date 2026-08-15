@@ -4,14 +4,13 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.michaelbel.usecase.shared.coroutines.SharedDispatchers
-import org.michaelbel.usecase.shared.coroutines.impl.SharedDispatchersImpl
+import org.michaelbel.usecase.shared.coroutines.AppDispatchers
+import org.michaelbel.usecase.shared.coroutines.impl.AppDispatchersImpl
 
 @Module
 @InstallIn(SingletonComponent::class)
 interface DispatchersModule {
 
     @Binds
-    fun sharedDispatchers(impl: SharedDispatchersImpl): SharedDispatchers
+    fun appDispatchers(impl: AppDispatchersImpl): AppDispatchers
 }
-
